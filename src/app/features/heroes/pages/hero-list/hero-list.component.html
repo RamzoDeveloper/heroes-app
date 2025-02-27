@@ -1,0 +1,7 @@
+<h3>List of Heroes</h3>
+<button mat-fab extended (click)="addHero()">
+  <mat-icon>add</mat-icon>
+  Añadir Heore
+</button>
+<br />
+<app-table [cols]="cols" [data]="heroes" (action)="onAction($event)"></app-table>
