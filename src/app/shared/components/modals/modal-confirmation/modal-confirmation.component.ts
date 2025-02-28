@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MatDialogRef } from '@angular/material/dialog';
 import { SharedModule } from '../../../shared.module';
 
 @Component({
@@ -11,7 +11,6 @@ import { SharedModule } from '../../../shared.module';
 })
 export class ModalConfirmationComponent {
   readonly dialogRef = inject(MatDialogRef<any>);
-  readonly data = inject<any>(MAT_DIALOG_DATA);
 
   onNoClick(): void {
     this.dialogRef.close(false);

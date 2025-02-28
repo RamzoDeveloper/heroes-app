@@ -5,6 +5,8 @@ import {
   Output,
   EventEmitter,
   AfterViewInit,
+  OnChanges,
+  SimpleChanges,
 } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
@@ -19,7 +21,7 @@ import { SharedModule } from '../../shared.module';
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.scss'],
 })
-export class TableComponent implements OnInit, AfterViewInit {
+export class TableComponent implements OnInit, AfterViewInit, OnChanges {
   @Input() data: Array<any> = [];
   @Input() cols: string[] = [];
   @Output() action = new EventEmitter<any>();
@@ -33,14 +35,31 @@ export class TableComponent implements OnInit, AfterViewInit {
   constructor() {
     this.dataSource = new MatTableDataSource(this.data);
   }
+
+  ngOnInit(): void {
+    this.displayedColumns = [...this.cols, 'actions'];
+    this.updateDataSource();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['data'] && !changes['data'].firstChange) {
+      this.updateDataSource();
+    }
+  }
+
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator!;
     this.dataSource.sort = this.sort!;
   }
 
-  ngOnInit(): void {
-    this.displayedColumns = [...this.cols, 'actions'];
+  updateDataSource(): void {
     this.dataSource = new MatTableDataSource(this.data);
+    if (this.paginator) {
+      this.dataSource.paginator = this.paginator;
+    }
+    if (this.sort) {
+      this.dataSource.sort = this.sort;
+    }
   }
 
   applyFilter(event: Event): void {

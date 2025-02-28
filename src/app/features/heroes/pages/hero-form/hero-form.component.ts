@@ -4,6 +4,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { Hero } from '../../../../shared/models/hero.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HeroService } from '../../services/hero.service';
+import { SwalService } from '../../../../core/services/swal.service';
 
 @Component({
   selector: 'app-hero-form',
@@ -23,7 +24,8 @@ export class HeroFormComponent implements OnInit {
   constructor(
     private activatedRoute: ActivatedRoute,
     private router: Router,
-    private heroService: HeroService
+    private heroService: HeroService,
+    private swalService: SwalService
   ) {}
   ngOnInit(): void {
     const id = this.activatedRoute.snapshot.paramMap.get('id');
@@ -57,11 +59,13 @@ export class HeroFormComponent implements OnInit {
 
   createHero(hero: Hero): void {
     this.heroService.create(hero);
+    this.swalService.success();
     this.goHeroList();
   }
 
   updateHero(heroId: number, hero: Hero): void {
     this.heroService.update(heroId, hero);
+    this.swalService.success();
     this.goHeroList();
   }
 }

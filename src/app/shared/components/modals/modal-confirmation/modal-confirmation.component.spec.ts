@@ -29,10 +29,6 @@ describe('ModalConfirmationComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should inject the dialog data correctly', () => {
-    expect(component.data).toEqual({ message: 'Are you sure?' });
-  });
-
   it('should close the dialog with false when onNoClick() is called', () => {
     component.onNoClick();
     expect(dialogRefSpy.close).toHaveBeenCalledWith(false);
