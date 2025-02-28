@@ -18,7 +18,7 @@ A **Single Page Application (SPA)** built with **Angular 18** that allows users 
 
 ### 1️. Clone the Repository
 ```bash
-git clone https://github.com/your-username/heroes-app.git
+git clone https://github.com/RamzoDeveloper/heroes-app.git
 cd heroes-app
 ```
 ### 2. Install Dependencies
@@ -61,5 +61,4 @@ docker-compose up --build -d
 
 ✅ **Angular 18** Frontend framework  
 ✅ **Angular Material & Bootstrap** UI components  
-✅ **RxJS** Reactive programming  
 ✅ **Docker** Deployment
