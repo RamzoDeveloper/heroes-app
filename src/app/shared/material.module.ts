@@ -8,6 +8,14 @@ import { MatFormFieldModule } from '@angular/material/form-field'; // Módulo pa
 import { MatInputModule } from '@angular/material/input'; // Módulo para inputs
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatCardModule } from '@angular/material/card';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatSelectModule } from '@angular/material/select';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatListModule } from '@angular/material/list';
+
 @NgModule({
   exports: [
     MatTableModule,
@@ -19,6 +27,14 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatInputModule,
     MatIconModule,
     MatTooltipModule,
+    MatInputModule,
+    MatSelectModule,
+    MatRadioModule,
+    MatCardModule,
+    ReactiveFormsModule,
+    MatToolbarModule,
+    MatSidenavModule,
+    MatListModule,
   ],
 })
 export class MaterialModule {}

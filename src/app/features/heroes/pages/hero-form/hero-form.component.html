@@ -1,1 +1,41 @@
-<p>hero-form works!</p>
+<form [formGroup]="heroForm" novalidate (ngSubmit)="onSubmit()">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-subtitle>INFORMACIÓN</mat-card-subtitle>
+      <mat-card-title
+        ><h3>{{ hero ? hero.name : "Nuevo Heroe" }}</h3></mat-card-title
+      >
+    </mat-card-header>
+    <mat-card-content>
+      <p>Completa los siguentes campos:</p>
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="w-100">
+            <mat-label>Nombre</mat-label>
+            <input
+              matInput
+              placeholder="Nombre"
+              formControlName="name"
+              appUppercase
+            />
+            @if (heroForm.controls['name'].hasError('required')) {
+            <mat-error>Campo <strong>requerido</strong></mat-error>
+            }
+          </mat-form-field>
+        </div>
+        <div class="col">
+          <mat-form-field class="w-100">
+            <mat-label>Poder</mat-label>
+            <input matInput placeholder="Poder" formControlName="power" />
+            @if (heroForm.controls['power'].hasError('required')) {
+            <mat-error>Campo <strong>requerido</strong></mat-error>
+            }
+          </mat-form-field>
+        </div>
+      </div>
+    </mat-card-content>
+    <mat-card-actions align="end">
+      <button mat-raised-button color="primary" type="submit">Aceptar</button>
+    </mat-card-actions>
+  </mat-card>
+</form>

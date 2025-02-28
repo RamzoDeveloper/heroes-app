@@ -1,24 +1,10 @@
 .table-container {
   display: flex;
   flex-direction: column;
-  gap: 20px;
   margin-top: 10px;
-}
-
-mat-form-field {
-  width: 100%;
 }
 
 table {
   width: 100%;
   margin-top: 10px;
-}
-
-mat-paginator {
-  margin-top: 10px;
-}
-
-mat-icon {
-  cursor: pointer;
-  margin-right: 10px; // Espacio entre los íconos
 }

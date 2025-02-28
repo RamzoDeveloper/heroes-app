@@ -1,4 +1,11 @@
-import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnInit,
+  Output,
+  EventEmitter,
+  AfterViewInit,
+} from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -12,7 +19,7 @@ import { SharedModule } from '../../shared.module';
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.scss'],
 })
-export class TableComponent implements OnInit {
+export class TableComponent implements OnInit, AfterViewInit {
   @Input() data: Array<any> = [];
   @Input() cols: string[] = [];
   @Output() action = new EventEmitter<any>();
@@ -26,12 +33,14 @@ export class TableComponent implements OnInit {
   constructor() {
     this.dataSource = new MatTableDataSource(this.data);
   }
+  ngAfterViewInit(): void {
+    this.dataSource.paginator = this.paginator!;
+    this.dataSource.sort = this.sort!;
+  }
 
   ngOnInit(): void {
     this.displayedColumns = [...this.cols, 'actions'];
     this.dataSource = new MatTableDataSource(this.data);
-    this.dataSource.paginator = this.paginator!;
-    this.dataSource.sort = this.sort!;
   }
 
   applyFilter(event: Event): void {

@@ -4,7 +4,7 @@ import Swal from 'sweetalert2';
 @Injectable({
   providedIn: 'root',
 })
-export class LoadingService {
+export class SwalService {
   constructor() {}
 
   showLoading(message: string = 'Cargando...') {
@@ -19,5 +19,12 @@ export class LoadingService {
 
   hideLoading() {
     Swal.close();
+  }
+
+  success(title: string = 'Operación existosa') {
+    Swal.fire({
+      icon: 'success',
+      title,
+    });
   }
 }
