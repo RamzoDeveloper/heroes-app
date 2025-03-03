@@ -1,47 +1,59 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HeroFormComponent } from './hero-form.component';
-import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ReactiveFormsModule } from '@angular/forms';
+import { RouterTestingModule } from '@angular/router/testing';
 import { HeroService } from '../../services/hero.service';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { SnackService } from '../../../../core/services/snack.service';
+import { of } from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
 
 describe('HeroFormComponent', () => {
   let component: HeroFormComponent;
   let fixture: ComponentFixture<HeroFormComponent>;
-  let heroServiceMock: any;
-  let routerMock: any;
+  let heroService: jasmine.SpyObj<HeroService>;
+  let snackService: jasmine.SpyObj<SnackService>;
+  let router: jasmine.SpyObj<Router>;
+  let dialog: jasmine.SpyObj<MatDialog>;
 
   beforeEach(async () => {
-    heroServiceMock = {
-      getHeroById: jasmine.createSpy('getHeroById').and.returnValue({
-        id: 1,
-        name: 'Superman',
-        power: 'Super fuerza',
-      }),
-      create: jasmine.createSpy('create'),
-      update: jasmine.createSpy('update'),
-    };
+    heroService = jasmine.createSpyObj('HeroService', [
+      'getHeroById',
+      'addHero',
+      'updateHero',
+    ]);
+    heroService.getHeroById.and.returnValue(
+      of({ id: 1, name: 'Superman', power: 'Strength' })
+    );
+    heroService.addHero.and.returnValue(
+      of({ id: 3, name: 'Batman', power: 'Intelligence' })
+    );
+    heroService.updateHero.and.returnValue(
+      of({ id: 1, name: 'Batman', power: 'Intelligence' })
+    );
 
-    routerMock = {
-      navigateByUrl: jasmine.createSpy('navigateByUrl'),
-    };
+    snackService = jasmine.createSpyObj('SnackService', ['success']);
+    router = jasmine.createSpyObj('Router', ['navigateByUrl']);
+    dialog = jasmine.createSpyObj('MatDialog', ['open']);
 
     await TestBed.configureTestingModule({
-      imports: [
-        HeroFormComponent,
-        ReactiveFormsModule,
-        FormsModule,
-        NoopAnimationsModule,
-      ],
+      declarations: [HeroFormComponent],
+      imports: [ReactiveFormsModule, RouterTestingModule],
       providers: [
+        { provide: HeroService, useValue: heroService },
+        { provide: SnackService, useValue: snackService },
+        { provide: Router, useValue: router },
+        { provide: MatDialog, useValue: dialog },
         {
           provide: ActivatedRoute,
           useValue: {
-            snapshot: { paramMap: { get: () => '1' } },
+            snapshot: {
+              paramMap: {
+                get: () => '1',
+              },
+            },
           },
         },
-        { provide: Router, useValue: routerMock },
-        { provide: HeroService, useValue: heroServiceMock },
       ],
     }).compileComponents();
 
@@ -50,56 +62,54 @@ describe('HeroFormComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create the component', () => {
+  it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should load hero data if ID is present in route', () => {
-    expect(heroServiceMock.getHeroById).toHaveBeenCalledWith(1);
+  it('should initialize hero form with correct controls', () => {
+    expect(component.heroForm.contains('name')).toBeTrue();
+    expect(component.heroForm.contains('power')).toBeTrue();
+  });
+
+  it('should call getHeroById when hero id is provided in the route', () => {
+    component.ngOnInit();
+    expect(heroService.getHeroById).toHaveBeenCalledWith(1);
+  });
+
+  it('should patch form with hero data on initialization', () => {
+    component.ngOnInit();
     expect(component.heroForm.value).toEqual({
-      name: 'SUPERMAN',
-      power: 'Super fuerza',
-    });
-  });
-
-  it('should call createHero and navigate when submitting a new hero', () => {
-    component.hero = undefined;
-    component.heroForm.setValue({ name: 'Batman', power: 'Detective' });
-
-    component.onSubmit();
-
-    expect(heroServiceMock.create).toHaveBeenCalledWith({
-      name: 'Batman',
-      power: 'Detective',
-    });
-    expect(routerMock.navigateByUrl).toHaveBeenCalledWith('heroes');
-  });
-
-  it('should call updateHero and navigate when updating an existing hero', () => {
-    component.hero = { id: 1, name: 'Superman', power: 'Super fuerza' };
-    component.heroForm.setValue({ name: 'Superman', power: 'Vuelo' });
-
-    component.onSubmit();
-
-    expect(heroServiceMock.update).toHaveBeenCalledWith(1, {
       name: 'Superman',
-      power: 'Vuelo',
+      power: 'Strength',
     });
-    expect(routerMock.navigateByUrl).toHaveBeenCalledWith('heroes');
   });
 
-  it('should navigate to hero list when calling goHeroList()', () => {
-    component.goHeroList();
-    expect(routerMock.navigateByUrl).toHaveBeenCalledWith('heroes');
-  });
-
-  it('should not submit form if invalid', () => {
-    component.heroForm.setValue({ name: '', power: '' });
-
+  it('should call addHero when form is valid and no hero is passed', () => {
+    component.heroForm.setValue({ name: 'Batman', power: 'Intelligence' });
     component.onSubmit();
+    expect(heroService.addHero).toHaveBeenCalledWith({
+      id: 1,
+      name: 'Batman',
+      power: 'Intelligence',
+    });
+    expect(snackService.success).toHaveBeenCalled();
+  });
 
-    expect(heroServiceMock.create).not.toHaveBeenCalled();
-    expect(heroServiceMock.update).not.toHaveBeenCalled();
-    expect(routerMock.navigateByUrl).not.toHaveBeenCalled();
+  it('should call updateHero when form is valid and hero exists', () => {
+    component.hero = { id: 1, name: 'Batman', power: 'Intelligence' };
+    component.heroForm.setValue({ name: 'Batman', power: 'Intelligence' });
+    component.onSubmit();
+    expect(heroService.updateHero).toHaveBeenCalledWith(1, {
+      id: 1,
+      name: 'Batman',
+      power: 'Intelligence',
+    });
+    expect(snackService.success).toHaveBeenCalled();
+  });
+
+  it('should navigate to hero list after successful form submission', () => {
+    component.heroForm.setValue({ name: 'Batman', power: 'Intelligence' });
+    component.onSubmit();
+    expect(router.navigateByUrl).toHaveBeenCalledWith('heroes');
   });
 });

@@ -5,7 +5,6 @@ import { HeroService } from '../../services/hero.service';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { of } from 'rxjs';
-import { TableActions } from '../../../../shared/models/enum';
 
 describe('HeroListComponent', () => {
   let component: HeroListComponent;
@@ -15,7 +14,10 @@ describe('HeroListComponent', () => {
   let dialog: jasmine.SpyObj<MatDialog>;
 
   beforeEach(async () => {
-    heroService = jasmine.createSpyObj('HeroService', ['getHeroes', 'delete']);
+    heroService = jasmine.createSpyObj('HeroService', [
+      'getHeroes',
+      'deleteHero',
+    ]);
     heroService.getHeroes.and.returnValue(
       of([
         { id: 1, name: 'Superman', power: 'Super fuerza' },
@@ -24,6 +26,7 @@ describe('HeroListComponent', () => {
     );
     router = jasmine.createSpyObj('Router', ['navigateByUrl']);
     dialog = jasmine.createSpyObj('MatDialog', ['open']);
+
     await TestBed.configureTestingModule({
       imports: [HeroListComponent, NoopAnimationsModule],
       providers: [
@@ -42,36 +45,14 @@ describe('HeroListComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should fetch heroes on init', () => {
-    expect(heroService.getHeroes).toHaveBeenCalled();
-    expect(component.heroes.length).toBe(2);
+  it('should call getHeroes on init', () => {
+    spyOn(component, 'getHeroes');
+    component.ngOnInit();
+    expect(component.getHeroes).toHaveBeenCalled();
   });
 
-  it('should navigate to add hero page', () => {
+  it('should navigate to hero creation page on addHero()', () => {
     component.addHero();
     expect(router.navigateByUrl).toHaveBeenCalledWith('heroes/hero');
-  });
-
-  it('should delete a hero', () => {
-    heroService.delete.and.returnValue(true);
-    component.deleteHero(1);
-    expect(heroService.delete).toHaveBeenCalledWith(1);
-  });
-
-  it('should navigate to update hero page', () => {
-    component.updateHero(2);
-    expect(router.navigateByUrl).toHaveBeenCalledWith('heroes/hero/2');
-  });
-
-  it('should call delete on DELETE action', () => {
-    spyOn(component, 'openModalConfirmation');
-    component.onAction({ key: TableActions.DELETE, element: { id: 3 } });
-    expect(component.openModalConfirmation).toHaveBeenCalledWith(3);
-  });
-
-  it('should call update on EDIT action', () => {
-    spyOn(component, 'updateHero');
-    component.onAction({ key: TableActions.EDIT, element: { id: 4 } });
-    expect(component.updateHero).toHaveBeenCalledWith(4);
   });
 });

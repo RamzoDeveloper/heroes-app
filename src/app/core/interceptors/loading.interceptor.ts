@@ -1,27 +1,22 @@
-import { Injectable } from '@angular/core';
-import {
-  HttpEvent,
-  HttpHandler,
-  HttpInterceptor,
-  HttpRequest,
-} from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { finalize } from 'rxjs/operators';
-import { SwalService } from '../services/swal.service';
+import { HttpEvent, HttpHandlerFn, HttpRequest } from '@angular/common/http';
+import { Observable, tap } from 'rxjs';
+import Swal from 'sweetalert2';
 
-@Injectable()
-export class LoadingInterceptor implements HttpInterceptor {
-  constructor(private swalService: SwalService) {}
+export function LoadingInterceptor(
+  req: HttpRequest<unknown>,
+  next: HttpHandlerFn
+): Observable<HttpEvent<unknown>> {
+  Swal.fire({
+    title: 'Cargando...',
+    allowOutsideClick: false,
+    didOpen: () => {
+      Swal.showLoading();
+    },
+  });
 
-  intercept(
-    request: HttpRequest<any>,
-    next: HttpHandler
-  ): Observable<HttpEvent<any>> {
-    this.swalService.showLoading();
-    return next.handle(request).pipe(
-      finalize(() => {
-        this.swalService.hideLoading();
-      })
-    );
-  }
+  return next(req).pipe(
+    tap((event) => {
+      Swal.close();
+    })
+  );
 }

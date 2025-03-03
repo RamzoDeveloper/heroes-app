@@ -4,7 +4,6 @@ import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { HEROES_DATA } from '../../../core/constants';
 
 describe('TableComponent', () => {
   let component: TableComponent;

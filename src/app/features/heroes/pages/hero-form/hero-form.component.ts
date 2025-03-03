@@ -4,7 +4,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { Hero } from '../../../../shared/models/hero.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HeroService } from '../../services/hero.service';
-import { SwalService } from '../../../../core/services/swal.service';
+import { SnackService } from '../../../../core/services/snack.service';
 
 @Component({
   selector: 'app-hero-form',
@@ -25,7 +25,7 @@ export class HeroFormComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private heroService: HeroService,
-    private swalService: SwalService
+    private snackService: SnackService
   ) {}
 
   ngOnInit(): void {
@@ -36,11 +36,10 @@ export class HeroFormComponent implements OnInit {
   }
 
   getHeroById(heroId: number): void {
-    const hero = this.heroService.getHeroById(heroId);
-    if (hero) {
+    this.heroService.getHeroById(heroId).subscribe((hero) => {
       this.hero = hero;
       this.heroForm.patchValue(hero);
-    }
+    });
   }
 
   goHeroList(): void {
@@ -51,6 +50,7 @@ export class HeroFormComponent implements OnInit {
     if (this.heroForm.valid) {
       let hero = this.heroForm.getRawValue() as Hero;
       if (this.hero) {
+        hero.id = this.hero.id;
         this.updateHero(this.hero.id, hero);
       } else {
         this.createHero(hero);
@@ -59,15 +59,16 @@ export class HeroFormComponent implements OnInit {
   }
 
   createHero(hero: Hero): void {
-    this.swalService.showLoading();
-    this.heroService.create(hero);
-    this.swalService.showLoading();
-    this.goHeroList();
+    this.heroService.addHero(hero).subscribe(() => {
+      this.snackService.success();
+      this.goHeroList();
+    });
   }
 
   updateHero(heroId: number, hero: Hero): void {
-    this.swalService.showLoading();
-    this.heroService.update(heroId, hero);
-    this.goHeroList();
+    this.heroService.updateHero(heroId, hero).subscribe(() => {
+      this.snackService.success();
+      this.goHeroList();
+    });
   }
 }
