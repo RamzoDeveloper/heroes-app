@@ -11,6 +11,7 @@ A **Single Page Application (SPA)** built with **Angular 18** that allows users 
 ✅ **Loading interceptor** for better UX  
 ✅ **Custom directives** for reusable UI behaviors  
 ✅ **Docker support** for containerized deployment  
+✅ **Change Theme feature** with signals  
 
 ---
 
