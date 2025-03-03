@@ -12,6 +12,8 @@ A **Single Page Application (SPA)** built with **Angular 18** that allows users 
 ✅ **Custom directives** for reusable UI behaviors  
 ✅ **Docker support** for containerized deployment  
 ✅ **Change Theme feature** with signals  
+✅ **Angular In-Memory Web API** for simulating backend responses  
+✅ **Snackbar notifications** for success messages  
 
 ---
 
@@ -62,4 +64,20 @@ docker-compose up --build -d
 
 ✅ **Angular 18** Frontend framework  
 ✅ **Angular Material & Bootstrap** UI components  
-✅ **Docker** Deployment
+✅ **Docker** Deployment  
+✅ **Angular In-Memory Web API** for mocking backend data  
+✅ **Snackbar notifications** for better user feedback  
+
+## 🧪 Running Tests
+
+To execute unit tests, run the following command:
+```bash
+ng test
+```
+This will open a browser and execute the tests in **Karma**.
+
+For headless execution, use:
+```bash
+ng test --watch=false --browsers=ChromeHeadless
+```
+

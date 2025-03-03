@@ -6,7 +6,7 @@ import {
 import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api'; // Nueva función para configurar el in-memory API
+import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
 import { InMemoryDataService } from './core/services/in-memory-data.service';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { LoadingInterceptor } from './core/interceptors/loading.interceptor';
