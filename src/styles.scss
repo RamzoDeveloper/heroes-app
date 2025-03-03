@@ -1,28 +1,38 @@
 @use "@angular/material" as mat;
 @include mat.core();
 
-$heroes-app-theme: mat.define-theme(
+$myapp-theme-primary: mat.m2-define-palette(mat.$m2-blue-palette, 700);
+$myapp-theme-accent: mat.m2-define-palette(mat.$m2-grey-palette, 900);
+$myapp-theme-warn: mat.m2-define-palette(mat.$m2-red-palette);
+
+$light-theme: mat.m2-define-light-theme(
   (
     color: (
-      theme-type: dark,
-      primary: mat.$azure-palette,
-      tertiary: mat.$blue-palette,
-    ),
-    density: (
-      scale: 0,
+      primary: $myapp-theme-primary,
+      accent: $myapp-theme-accent,
+      warn: $myapp-theme-warn,
     ),
   )
 );
 
-:root {
-  @include mat.all-component-themes($heroes-app-theme);
+$dark-theme: mat.m2-define-dark-theme(
+  (
+    color: (
+      primary: $myapp-theme-primary,
+      accent: $myapp-theme-accent,
+      warn: $myapp-theme-warn,
+    ),
+  )
+);
+
+.dark-theme {
+  @include mat.all-component-colors($dark-theme);
 }
 
 html,
 body {
+  @include mat.all-component-themes($light-theme);
   height: 100%;
-}
-body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "San Francisco",
     "Helvetica Neue", "Segoe UI", Roboto, Arial, sans-serif !important;

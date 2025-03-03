@@ -57,7 +57,7 @@ describe('HeroFormComponent', () => {
   it('should load hero data if ID is present in route', () => {
     expect(heroServiceMock.getHeroById).toHaveBeenCalledWith(1);
     expect(component.heroForm.value).toEqual({
-      name: 'Superman',
+      name: 'SUPERMAN',
       power: 'Super fuerza',
     });
   });

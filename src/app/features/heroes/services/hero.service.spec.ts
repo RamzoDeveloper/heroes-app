@@ -29,9 +29,9 @@ describe('HeroService', () => {
     });
   });
 
-  it('should update an existing hero', () => {
+  it('should update an existing hero', async () => {
     const updatedHero: Hero = { id: 1, name: 'Superman', power: 'Vuelo' };
-    const result = service.update(updatedHero.id, updatedHero);
+    const result = await service.update(updatedHero.id, updatedHero);
     expect(result).toBeTrue();
     expect(service.getHeroById(1)?.power).toBe('Vuelo');
   });
@@ -42,14 +42,14 @@ describe('HeroService', () => {
     expect(result).toBeFalse();
   });
 
-  it('should delete an existing hero', () => {
-    const result = service.delete(1);
+  it('should delete an existing hero', async () => {
+    const result = await service.delete(1);
     expect(result).toBeTrue();
     expect(service.getHeroById(1)).toBeUndefined();
   });
 
-  it('should return false when deleting a non-existent hero', () => {
-    const result = service.delete(999);
+  it('should return false when deleting a non-existent hero', async () => {
+    const result = await service.delete(999);
     expect(result).toBeFalse();
   });
 });

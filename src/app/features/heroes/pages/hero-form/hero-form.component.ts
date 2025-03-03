@@ -9,7 +9,7 @@ import { SwalService } from '../../../../core/services/swal.service';
 @Component({
   selector: 'app-hero-form',
   templateUrl: './hero-form.component.html',
-  styleUrl: './hero-form.component.scss',
+  styleUrls: ['./hero-form.component.scss'],
   standalone: true,
   imports: [SharedModule],
 })
@@ -27,6 +27,7 @@ export class HeroFormComponent implements OnInit {
     private heroService: HeroService,
     private swalService: SwalService
   ) {}
+
   ngOnInit(): void {
     const id = this.activatedRoute.snapshot.paramMap.get('id');
     if (id) {
@@ -58,14 +59,15 @@ export class HeroFormComponent implements OnInit {
   }
 
   createHero(hero: Hero): void {
+    this.swalService.showLoading();
     this.heroService.create(hero);
-    this.swalService.success();
+    this.swalService.showLoading();
     this.goHeroList();
   }
 
   updateHero(heroId: number, hero: Hero): void {
+    this.swalService.showLoading();
     this.heroService.update(heroId, hero);
-    this.swalService.success();
     this.goHeroList();
   }
 }

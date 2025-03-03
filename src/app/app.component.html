@@ -1,10 +1,14 @@
 <mat-sidenav-container>
   <mat-sidenav-content>
     <mat-toolbar>
-      <span>Heroes App</span>
+      <strong>Heroes App</strong>
+      <span class="spacer"></span>
+      <button mat-icon-button (click)="toggleTheme()" matTooltip="Cambiar tema">
+        <mat-icon>dark_mode</mat-icon>
+      </button>
     </mat-toolbar>
 
-    <div class="container" style="min-height: 100vh">
+    <div class="container content">
       <router-outlet></router-outlet>
     </div>
   </mat-sidenav-content>

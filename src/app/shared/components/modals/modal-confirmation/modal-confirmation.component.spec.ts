@@ -16,7 +16,7 @@ describe('ModalConfirmationComponent', () => {
       imports: [ModalConfirmationComponent, SharedModule, NoopAnimationsModule],
       providers: [
         { provide: MatDialogRef, useValue: dialogRefSpy },
-        { provide: MAT_DIALOG_DATA, useValue: { message: 'Are you sure?' } }, // Mocked data
+        { provide: MAT_DIALOG_DATA, useValue: { message: 'Are you sure?' } },
       ],
     }).compileComponents();
 

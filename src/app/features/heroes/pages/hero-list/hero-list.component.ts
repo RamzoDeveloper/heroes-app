@@ -8,6 +8,7 @@ import { ModalConfirmationComponent } from '../../../../shared/components/modals
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { TableActions } from '../../../../shared/models/enum';
+import { SwalService } from '../../../../core/services/swal.service';
 
 @Component({
   selector: 'app-hero-list',
@@ -21,6 +22,7 @@ export class HeroListComponent implements OnInit {
   cols: string[] = HERO_COLS;
   constructor(
     private heroService: HeroService,
+    private swalService: SwalService,
     public dialog: MatDialog,
     private router: Router
   ) {}
@@ -34,6 +36,7 @@ export class HeroListComponent implements OnInit {
       this.heroes = heroes;
     });
   }
+
   addHero(): void {
     this.router.navigateByUrl('heroes/hero');
   }
@@ -41,6 +44,7 @@ export class HeroListComponent implements OnInit {
   deleteHero(heroId: number): void {
     this.heroService.delete(heroId);
   }
+
   updateHero(heroId: number): void {
     this.router.navigateByUrl('heroes/hero/' + heroId);
   }
@@ -61,6 +65,7 @@ export class HeroListComponent implements OnInit {
     const dialogRef = this.dialog.open(ModalConfirmationComponent);
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
+        this.swalService.showLoading();
         this.deleteHero(heroId);
       }
     });

@@ -25,12 +25,12 @@
     <ng-container matColumnDef="actions">
       <th mat-header-cell *matHeaderCellDef>Actions</th>
       <td mat-cell *matCellDef="let element">
-        <button mat-icon-button>
+        <button mat-icon-button color="primary">
           <mat-icon matTooltip="Editar" (click)="onAction('edit', element)"
             >edit</mat-icon
           >
         </button>
-        <button mat-icon-button>
+        <button mat-icon-button color="warn">
           <mat-icon matTooltip="Borrar" (click)="onAction('delete', element)"
             >delete</mat-icon
           >
